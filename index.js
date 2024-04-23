@@ -41,8 +41,7 @@ app.get("/api/:dateString", (req, res) => {
   const dayName = days[date.getDay()];
   const monthName = months[date.getUTCMonth()];
   res.json({ unix: unixCode, utc: `${dayName}, ${date.getDate()} ${monthName} ${date.getFullYear()} 00:00:00 GMT` });
-})
-
+});
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
