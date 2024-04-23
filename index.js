@@ -8,7 +8,7 @@ var app = express();
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
 var cors = require('cors');
-app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 204
+app.use(cors({ optionsSuccessStatus: 200 }));  // some legacy browsers choke on 204
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
@@ -21,7 +21,15 @@ app.get("/", function (req, res) {
 
 // your first API endpoint... 
 app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+  res.json({ greeting: 'hello API' });
+});
+
+//response for empty date parameter..
+app.get("/api/", function (req, res) {
+  let date = new Date();
+  date = date.toUTCString();
+  console.log(date);
+  res.json({ unix: new Date().getTime(), utc: date});
 });
 
 //creating below endpoint for fetching only with date
@@ -32,8 +40,16 @@ app.get("/api/:dateString", (req, res) => {
   let date = "";
   if (dateString.split("-").length > 1) {
     date = new Date(dateString);
+    console.log(date);
+    if (date == "Invalid Date") {
+      res.json({ error: "Invalid Date" });
+    }
   } else {
     date = new Date(parseInt(dateString));
+    console.log(date);
+    if (date == "Invalid Date" || dateString.length < 13) {
+      res.json({ error: "Invalid Date" });
+    }
   }
   const unixCode = date.getTime(); // the result is in milliseconds (divide by 1000 to get in seconds)
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
